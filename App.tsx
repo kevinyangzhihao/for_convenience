@@ -95,7 +95,7 @@ const App: React.FC = () => {
               <div className="bg-indigo-600 p-2 rounded-lg">
                 <i className="fa-solid fa-briefcase text-white text-xl"></i>
               </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent italic">JobMatch Hybrid</span>
+              <span className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent italic">Job6Match Hybrid</span>
             </div>
             <button 
               onClick={resetForm}
