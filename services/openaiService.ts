@@ -66,9 +66,27 @@ export const evaluateJobsWithOpenAI = async (
 
     const content = response.choices[0].message.content;
     if (!content) throw new Error("OpenAI returned no content.");
-    
-    const parsed = JSON.parse(content) as EvaluationResult;
-    
+    let parsed = JSON.parse(content);
+    // 兼容 OpenAI 返回字段名 EVALUATION 或 evaluations
+    if (parsed.EVALUATION && !parsed.evaluations) {
+          // 兼容 EVALUATIONRESULTS 字段
+          if (parsed.EVALUATIONRESULTS && !parsed.evaluations) {
+                // 兼容 JOBEVALUATIONS 字段
+                if (parsed.JOBEVALUATIONS && !parsed.evaluations) {
+                  parsed.evaluations = parsed.JOBEVALUATIONS;
+                  delete parsed.JOBEVALUATIONS;
+                }
+            parsed.evaluations = parsed.EVALUATIONRESULTS;
+            delete parsed.EVALUATIONRESULTS;
+          }
+      parsed.evaluations = parsed.EVALUATION;
+      delete parsed.EVALUATION;
+    }
+    // 兼容单个 evaluation 对象
+    if (parsed.evaluation && !parsed.evaluations) {
+      parsed.evaluations = [parsed.evaluation];
+      delete parsed.evaluation;
+    }
     // Sanity check: Ensure nested properties are arrays
     if (parsed.evaluations) {
       parsed.evaluations = parsed.evaluations.map(job => ({
@@ -78,7 +96,6 @@ export const evaluateJobsWithOpenAI = async (
         cons: Array.isArray(job.cons) ? job.cons : []
       }));
     }
-    
     return parsed;
   } catch (error: any) {
     console.error("OpenAI Analysis Error:", error);

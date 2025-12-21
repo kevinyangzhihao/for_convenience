@@ -64,14 +64,46 @@ const App: React.FC = () => {
     try {
       setLoadingStage("Analyzing matches and generating materials...");
       const scrapedData = await getManualJobDetails(jobs);
-      const evaluationResult = await evaluateJobsWithOpenAI(
-        { ...preferences, openaiKey },
-        scrapedData,
-        resumeText
-      );
-      setResult(evaluationResult);
+      let evaluationResult: any = null;
+      try {
+        evaluationResult = await evaluateJobsWithOpenAI(
+          { ...preferences, openaiKey },
+          scrapedData,
+          resumeText
+        );
+      } catch (openaiError: any) {
+        console.error('[OpenAI error]', {
+          message: openaiError.message || openaiError,
+          apiKey: openaiKey,
+          resume: resumeText,
+          jobs: scrapedData,
+          stack: openaiError.stack || ''
+        });
+        setError('OpenAI error: Failed to analyze jobs. See console for details.');
+        setResult(null);
+        return;
+      }
+      if (!evaluationResult || !evaluationResult.evaluations || evaluationResult.evaluations.length === 0) {
+        console.error('[No evaluation results]', {
+          apiKey: openaiKey,
+          resume: resumeText,
+          jobs: scrapedData,
+          rawResult: evaluationResult
+        });
+        setError('No evaluation results were generated. See console for details.');
+        setResult(null);
+      } else {
+        setResult(evaluationResult);
+      }
     } catch (err: any) {
-      setError(err.message || "Analysis failed.");
+      console.error('[General error]', {
+        message: err.message || err,
+        apiKey: openaiKey,
+        resume: resumeText,
+        jobs,
+        stack: err.stack || ''
+      });
+      setError('General error: Analysis failed. See console for details.');
     } finally {
       setLoading(false);
       setLoadingStage('');
