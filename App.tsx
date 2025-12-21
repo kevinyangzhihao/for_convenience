@@ -84,16 +84,26 @@ const App: React.FC = () => {
         return;
       }
       if (!evaluationResult || !evaluationResult.evaluations || evaluationResult.evaluations.length === 0) {
-        console.error('[No evaluation results]', {
-          apiKey: openaiKey,
-          resume: resumeText,
-          jobs: scrapedData,
-          rawResult: evaluationResult
-        });
-        setError('No evaluation results were generated. See console for details.');
-        setResult(null);
-      } else {
-        setResult(evaluationResult);
+        // 兼容 evaluationResult.results 字段
+        if (evaluationResult && evaluationResult.results && Array.isArray(evaluationResult.results)) {
+          evaluationResult.evaluations = evaluationResult.results;
+        }
+        // 兼容 evaluationResult 直接为单个对象
+        if (evaluationResult && !evaluationResult.evaluations && !evaluationResult.results && typeof evaluationResult === 'object') {
+          evaluationResult.evaluations = [evaluationResult];
+        }
+        if (evaluationResult && evaluationResult.evaluations && evaluationResult.evaluations.length > 0) {
+          setResult(evaluationResult);
+        } else {
+          console.error('[No evaluation results]', {
+            apiKey: openaiKey,
+            resume: resumeText,
+            jobs: scrapedData,
+            rawResult: evaluationResult
+          });
+          setError('No evaluation results were generated. See console for details.');
+          setResult(null);
+        }
       }
     } catch (err: any) {
       console.error('[General error]', {
