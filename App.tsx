@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { UserPreferences, JobPosting, EvaluationResult } from './types';
-import { scrapeJobDetails } from './services/geminiService';
+import { getManualJobDetails } from './services/geminiService';
 import { evaluateJobsWithOpenAI } from './services/openaiService';
 import { PreferenceSlider } from './components/PreferenceSlider';
 import { JobCard } from './components/JobCard';
@@ -21,7 +21,7 @@ const App: React.FC = () => {
 
   const [resumeText, setResumeText] = useState<string>('');
   const [jobs, setJobs] = useState<JobPosting[]>([
-    { id: '1', url: '', description: '' }
+    { id: '1', description: '' }
   ]);
 
   const [loading, setLoading] = useState(false);
@@ -30,7 +30,7 @@ const App: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   const handleAddJob = () => {
-    setJobs([...jobs, { id: Math.random().toString(36).substr(2, 9), url: '', description: '' }]);
+    setJobs([...jobs, { id: Math.random().toString(36).substr(2, 9), description: '' }]);
   };
 
   const handleUpdateJob = (index: number, updatedJob: JobPosting) => {

@@ -28,20 +28,6 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onUpdate, onRemove, index
       </div>
       
       <div className="space-y-5">
-        <div>
-          <label className="block text-[10px] font-black text-gray-400 mb-1.5 uppercase tracking-widest">Job URL (Public LarkSuite, Notion, etc.)</label>
-          <div className="relative">
-            <i className="fa-solid fa-link absolute left-4 top-1/2 -translate-y-1/2 text-gray-300"></i>
-            <input
-              type="url"
-              placeholder="https://..."
-              value={job.url}
-              onChange={(e) => onUpdate({ ...job, url: e.target.value })}
-              className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none text-sm text-gray-700 font-medium"
-            />
-          </div>
-        </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-[10px] font-black text-gray-400 mb-1.5 uppercase tracking-widest">Company (Optional Override)</label>
@@ -66,9 +52,9 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onUpdate, onRemove, index
         </div>
 
         <div>
-          <label className="block text-[10px] font-black text-gray-400 mb-1.5 uppercase tracking-widest">Manual Description (Optional backup)</label>
+          <label className="block text-[10px] font-black text-gray-400 mb-1.5 uppercase tracking-widest">Manual Description</label>
           <textarea
-            placeholder="If Gemini fails to scrape the URL, paste the text here..."
+            placeholder="Paste the job description here..."
             value={job.description || ''}
             onChange={(e) => onUpdate({ ...job, description: e.target.value })}
             className="w-full h-24 px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none text-xs text-gray-600 resize-none"

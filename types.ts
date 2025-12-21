@@ -11,7 +11,6 @@ export interface UserPreferences {
 
 export interface JobPosting {
   id: string;
-  url: string;
   title?: string;
   company?: string;
   location?: string;
@@ -20,7 +19,6 @@ export interface JobPosting {
 
 export interface ScrapedJob {
   id: string;
-  url: string;
   title: string;
   company: string;
   description: string;

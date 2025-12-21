@@ -100,19 +100,7 @@ export const ResultDashboard: React.FC<ResultDashboardProps> = ({ result, jobs }
                 {currentEval.status}
               </div>
 
-              {currentJobInput?.url && (
-                <div className="mt-6 pt-6 border-t border-gray-50">
-                  <a 
-                    href={currentJobInput.url} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-xs font-bold text-gray-400 hover:text-indigo-600 flex items-center justify-center gap-2 group"
-                  >
-                    <i className="fa-solid fa-link group-hover:rotate-12 transition-transform"></i>
-                    View Original Link
-                  </a>
-                </div>
-              )}
+              {/* url相关展示已移除 */}
             </div>
 
             <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
