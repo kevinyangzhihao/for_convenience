@@ -53,8 +53,8 @@ const App: React.FC = () => {
       setError("Please provide your resume first.");
       return;
     }
-    if (jobs.some(j => !j.url.trim() && !j.description?.trim())) {
-      setError("Each job must have at least a URL or a manual description.");
+    if (jobs.some(j => !j.description?.trim())) {
+      setError("Each job must have a manual description.");
       return;
     }
 
@@ -62,19 +62,16 @@ const App: React.FC = () => {
     setError(null);
 
     try {
-      setLoadingStage("Gemini: Scraping job data from external URLs...");
-      const scrapedData = await scrapeJobDetails(jobs);
-      
-      setLoadingStage("OpenAI: Analyzing matches and generating materials...");
+      setLoadingStage("Analyzing matches and generating materials...");
+      const scrapedData = await getManualJobDetails(jobs);
       const evaluationResult = await evaluateJobsWithOpenAI(
         { ...preferences, openaiKey },
         scrapedData,
         resumeText
       );
-      
       setResult(evaluationResult);
     } catch (err: any) {
-      setError(err.message || "Analysis failed. Ensure URLs are accessible.");
+      setError(err.message || "Analysis failed.");
     } finally {
       setLoading(false);
       setLoadingStage('');
