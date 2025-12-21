@@ -1,0 +1,5 @@
+
+{
+  "name": "JobMatch AI: Automated Job Evaluator",
+  "description": "A sophisticated tool that uses Gemini 3 and Google Search Grounding to automatically scrape job postings from URLs and compare them against your resume and preferences."
+}
